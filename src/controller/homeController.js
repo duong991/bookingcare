@@ -1,4 +1,5 @@
 import db from "../models/index";
+import { createNewUser } from "../service/CRUD_user";
 
 let getHomePage = async (req, res) => {
     try {
@@ -14,6 +15,18 @@ let getHomePage = async (req, res) => {
     }
 };
 
+let getSignupPage = async (req, res) => {
+    return res.render("signUpPage.ejs");
+};
+
+let createUser = async (req, res) => {
+    let data = await req.body;
+    createNewUser(data);
+    return res.send("Create new user");
+};
+
 module.exports = {
     getHomePage,
+    getSignupPage,
+    createUser,
 };
