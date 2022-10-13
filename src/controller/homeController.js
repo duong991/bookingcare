@@ -1,5 +1,5 @@
 import db from "../models/index";
-import { createNewUser } from "../service/CRUD_user";
+import { createNewUser, getAllUser } from "../service/CRUD_user";
 
 let getHomePage = async (req, res) => {
     try {
@@ -22,11 +22,18 @@ let getSignupPage = async (req, res) => {
 let createUser = async (req, res) => {
     let data = await req.body;
     createNewUser(data);
-    return res.send("Create new user");
+    return res.redirect("/display_user");
+};
+
+let getDisplayUserPage = async (req, res) => {
+    let data = await getAllUser();
+    console.log(data);
+    return res.render("displayUserPage.ejs", { data: data });
 };
 
 module.exports = {
     getHomePage,
     getSignupPage,
     createUser,
+    getDisplayUserPage,
 };
