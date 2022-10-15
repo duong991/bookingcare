@@ -4,7 +4,7 @@ let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
             let userData = {};
-            let isExist = await checkUserEmail(email); //  check email người dùng
+            let isExist = await checkUserEmail(email); //  check email exist
             if (isExist) {
                 let user = await db.User.findOne({
                     attributes: ["email", "password", "roleId"],
