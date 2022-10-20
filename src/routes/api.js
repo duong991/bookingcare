@@ -5,6 +5,10 @@ let router = express.Router();
 let initAPIRouter = function (app) {
     router.post("/api/login", userController.handleLogin);
 
+    router.get("/api/get-all-user", userController.handleGetAllUser);
+    router.post("/api/create-new-user", userController.handleCreateNewUser);
+    router.delete("/api/delete-user", userController.handleDeleteUser);
+    router.put("/api/update-user", userController.handleUpdateUser);
     return app.use("/", router);
 };
 
