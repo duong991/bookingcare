@@ -119,9 +119,10 @@ let DeleteUser = (userId) => {
             });
             if (!user) {
                 resolve({ errCode: 1, errMessage: "User not found" });
+            } else {
+                await user.destroy();
+                resolve({ errCode: 0, errMessage: "Ok" });
             }
-            await user.destroy();
-            resolve({ errCode: 0, errMessage: "Ok" });
         } catch (error) {
             reject(error);
         }
