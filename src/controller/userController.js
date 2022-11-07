@@ -51,14 +51,15 @@ let handleDeleteUser = async (req, res) => {
 };
 
 let handleUpdateUser = async (req, res) => {
-    let userId = req.body.id;
+    let data = req.body.data;
+    let userId = data.id;
     if (!userId) {
         return res.status(200).json({
             errCode: 1,
             errMessage: "Missing input parameters!",
         });
     }
-    let message = await userService.UpdateUser(req.body);
+    let message = await userService.UpdateUser(data);
     return res.status(200).json({ message });
 };
 module.exports = {
