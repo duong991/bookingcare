@@ -144,6 +144,8 @@ let UpdateUser = (data) => {
                     fullName: data.fullName,
                     address: data.address,
                     phoneNumber: data.phoneNumber,
+                    gender: data.gender,
+                    roleId: data.roleId,
                 },
                 {
                     where: { id: data.id },
