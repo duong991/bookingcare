@@ -9,7 +9,7 @@ let handleUserLogin = (email, password) => {
             let isExist = await checkUserEmail(email); //  check email exist
             if (isExist) {
                 let user = await db.User.findOne({
-                    attributes: ["email", "password", "roleId"],
+                    attributes: ["email", "password", "roleId", "fullName"],
                     where: { email: email },
                     raw: true,
                 });
@@ -19,7 +19,6 @@ let handleUserLogin = (email, password) => {
                     if (check) {
                         userData.errCode = 0;
                         userData.message = "Oke";
-
                         delete user.password;
                         userData.userInfo = user;
                     } else {
@@ -94,12 +93,12 @@ let CreateNewUser = (data) => {
                     email: data.email,
                     password: hashPassword,
                     fullName: data.fullName,
-                    address: data.address,
                     phoneNumber: data.phoneNumber,
-                    positionId: data.positionId,
-                    image: data.image,
+                    address: data.address,
+                    positionId: data.position,
                     gender: data.gender,
-                    roleId: data.roleId,
+                    roleId: data.role,
+                    image: data.avatar,
                 });
                 //return message
                 resolve({ errCode: 0, message: "Ok" });
@@ -132,26 +131,27 @@ let DeleteUser = (userId) => {
 let UpdateUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let user = await db.User.findOne({ where: { id: data.id } });
-            if (!user) {
+            let user = await db.User.findOne({
+                where: { id: data.id },
+                raw: false,
+            });
+            if (user) {
+                user.fullName = data.fullName;
+                user.address = data.address;
+                user.phoneNumber = data.phoneNumber;
+                user.gender = data.gender;
+                user.roleId = data.roleId;
+                if (user.avatar) {
+                    user.image = data.avatar;
+                }
+                await user.save();
+                resolve({ errCode: 0, message: "Ok" });
+            } else {
                 resolve({
                     errCode: 1,
                     errMessage: "User not found",
                 });
             }
-            await db.User.update(
-                {
-                    fullName: data.fullName,
-                    address: data.address,
-                    phoneNumber: data.phoneNumber,
-                    gender: data.gender,
-                    roleId: data.roleId,
-                },
-                {
-                    where: { id: data.id },
-                }
-            );
-            resolve({ errCode: 0, message: "Ok" });
         } catch (error) {
             reject(error);
         }
