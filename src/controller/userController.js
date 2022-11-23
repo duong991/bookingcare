@@ -52,7 +52,6 @@ let handleDeleteUser = async (req, res) => {
 
 let handleUpdateUser = async (req, res) => {
     let data = req.body.data;
-    console.log(data);
     let userId = data.id;
     if (!userId) {
         return res.status(200).json({
