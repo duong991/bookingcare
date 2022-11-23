@@ -34,8 +34,8 @@ let handleGetAllUser = async (req, res) => {
 };
 
 let handleCreateNewUser = async (req, res) => {
-    let message = await userService.CreateNewUser(req.body.data);
-    return res.status(200).json({ message });
+    let message = await userService.CreateNewUser(req.body);
+    return res.status(200).json(message);
 };
 
 let handleDeleteUser = async (req, res) => {
@@ -47,11 +47,12 @@ let handleDeleteUser = async (req, res) => {
         });
     }
     let message = await userService.DeleteUser(userId);
-    return res.status(200).json({ message });
+    return res.status(200).json(message);
 };
 
 let handleUpdateUser = async (req, res) => {
     let data = req.body.data;
+    console.log(data);
     let userId = data.id;
     if (!userId) {
         return res.status(200).json({
@@ -60,7 +61,7 @@ let handleUpdateUser = async (req, res) => {
         });
     }
     let message = await userService.UpdateUser(data);
-    return res.status(200).json({ message });
+    return res.status(200).json(message);
 };
 
 let getAllCode = async (req, res) => {
