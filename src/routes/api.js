@@ -1,5 +1,6 @@
 import express from "express";
 import userController from "../controller/userController";
+import doctorController from "../controller/doctorController";
 let router = express.Router();
 
 let initAPIRouter = function (app) {
@@ -11,6 +12,8 @@ let initAPIRouter = function (app) {
     router.put("/api/update-user", userController.handleUpdateUser);
 
     router.get("/api/all-code", userController.getAllCode);
+
+    router.get("/api/top-doctor-home", doctorController.getDoctorHome);
     return app.use("/", router);
 };
 
