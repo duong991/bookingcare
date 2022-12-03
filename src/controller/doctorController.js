@@ -27,7 +27,6 @@ let getAllDoctor = async (req, res) => {
 
 let updateDetailDoctor = async (req, res) => {
     try {
-        console.log(req.body);
         let doctorId = req.body.doctorId;
         if (!doctorId) {
             return res
@@ -58,9 +57,24 @@ let getDetailDoctorById = async (req, res) => {
             .json({ errorCode: -1, message: "Error from server..." });
     }
 };
+
+let getMarkdownByIdDoctor = async (req, res) => {
+    try {
+        let data = await doctorService.getMarkdownByIdDoctorService(
+            req.query.id
+        );
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(200)
+            .json({ errorCode: -1, message: "Error from server..." });
+    }
+};
 module.exports = {
     getDoctorHome,
     getAllDoctor,
     updateDetailDoctor,
     getDetailDoctorById,
+    getMarkdownByIdDoctor,
 };

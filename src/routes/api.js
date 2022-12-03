@@ -22,6 +22,11 @@ let initAPIRouter = function (app) {
         doctorController.getDetailDoctorById
     );
 
+    router.get(
+        "/api/get-markdown-by-id-doctor",
+        doctorController.getMarkdownByIdDoctor
+    );
+
     return app.use("/", router);
 };
 

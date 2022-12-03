@@ -103,16 +103,10 @@ let getDetailDoctorByIdService = (id) => {
                     errMessage: "Missing required parameters",
                 });
             } else {
-                let info = await db.User.findOne({
+                let data = await db.User.findOne({
                     where: { id: id },
                     attributes: {
-                        exclude: [
-                            "password",
-                            "image",
-                            "gender",
-                            "roleId",
-                            "positionId",
-                        ],
+                        exclude: ["password", "gender", "roleId", "positionId"],
                     },
                     include: [
                         {
@@ -129,15 +123,32 @@ let getDetailDoctorByIdService = (id) => {
                             attributes: ["valueEn", "valueVi"],
                         },
                     ],
-                    raw: true,
+                    raw: false,
                     nest: true,
                 });
+                if (data && data.image) {
+                    data.image = new Buffer(data.image, "base64").toString(
+                        "binary"
+                    );
+                }
+                if (!data) data = {};
                 resolve({
                     errCode: 0,
                     message: "Ok",
-                    data: info,
+                    data: data,
                 });
             }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+let getMarkdownByIdDoctorService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = await db.Markdown.findOne({ where: { doctorId: id } });
+            resolve({ errCode: 0, message: "Ok", data: data });
         } catch (error) {
             reject(error);
         }
@@ -148,4 +159,5 @@ module.exports = {
     getAllDoctorsService,
     updateDetailDoctorService,
     getDetailDoctorByIdService,
+    getMarkdownByIdDoctorService,
 };
