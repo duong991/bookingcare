@@ -26,6 +26,10 @@ let initAPIRouter = function (app) {
         "/api/get-markdown-by-id-doctor",
         doctorController.getMarkdownByIdDoctor
     );
+    router.post(
+        "/api/bulk-create-schedule",
+        doctorController.bulkCreateSchedule
+    );
 
     return app.use("/", router);
 };

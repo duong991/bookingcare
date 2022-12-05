@@ -1,5 +1,8 @@
 import db from "../models/index";
+import _ from "lodash";
+require("dotenv").config();
 
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 let getTopDoctorHome = (limit) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -154,10 +157,58 @@ let getMarkdownByIdDoctorService = (id) => {
         }
     });
 };
+
+let bulkCreateScheduleService = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.result || !data.doctorId || !data.date) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing result parameters",
+                });
+            } else {
+                let schedule = data.result;
+                let doctorId = data.doctorId;
+                let date = data.date;
+                if (schedule && schedule.length > 0) {
+                    schedule = schedule.map((item) => {
+                        item.maxNumber = MAX_NUMBER_SCHEDULE;
+                        return item;
+                    });
+                }
+
+                //get exist data
+                let exist = await db.Schedule.findAll({
+                    where: { doctorId: doctorId, date: date },
+                    attributes: ["timeType", "date", "doctorId", "maxNumber"],
+                });
+
+                // convert date
+                if (exist && exist.length > 0) {
+                    exist.map((item, index) => {
+                        item.date = new Date(item.date).getTime();
+                        return item;
+                    });
+                }
+
+                // get data can create
+                let toCreate = _.differenceWith(schedule, exist, (a, b) => {
+                    return a.timeType == b.timeType && a.date == b.date;
+                });
+
+                await db.Schedule.bulkCreate(toCreate);
+                resolve({ errCode: 0, message: "Ok" });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
 module.exports = {
     getTopDoctorHome,
     getAllDoctorsService,
     updateDetailDoctorService,
     getDetailDoctorByIdService,
     getMarkdownByIdDoctorService,
+    bulkCreateScheduleService,
 };
