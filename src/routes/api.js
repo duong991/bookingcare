@@ -30,6 +30,10 @@ let initAPIRouter = function (app) {
         "/api/bulk-create-schedule",
         doctorController.bulkCreateSchedule
     );
+    router.get(
+        "/api/get-schedule-doctor-by-date",
+        doctorController.getGetScheduleDoctorByDate
+    );
 
     return app.use("/", router);
 };

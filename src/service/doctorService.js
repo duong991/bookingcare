@@ -204,6 +204,31 @@ let bulkCreateScheduleService = (data) => {
         }
     });
 };
+
+let getGetScheduleDoctorByDateService = (doctorId, date) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId || !date) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing result parameters",
+                });
+            } else {
+                let data = await db.Schedule.findAll({
+                    where: { doctorId: doctorId, date: date },
+                });
+                if (!data) data = [];
+
+                resolve({
+                    errCode: 0,
+                    data: data,
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
 module.exports = {
     getTopDoctorHome,
     getAllDoctorsService,
@@ -211,4 +236,5 @@ module.exports = {
     getDetailDoctorByIdService,
     getMarkdownByIdDoctorService,
     bulkCreateScheduleService,
+    getGetScheduleDoctorByDateService,
 };
