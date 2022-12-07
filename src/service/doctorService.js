@@ -184,12 +184,12 @@ let bulkCreateScheduleService = (data) => {
                 });
 
                 // convert date
-                if (exist && exist.length > 0) {
-                    exist.map((item, index) => {
-                        item.date = new Date(item.date).getTime();
-                        return item;
-                    });
-                }
+                // if (exist && exist.length > 0) {
+                //     exist.map((item, index) => {
+                //         item.date = new Date(item.date).getTime();
+                //         return item;
+                //     });
+                // }
 
                 // get data can create
                 let toCreate = _.differenceWith(schedule, exist, (a, b) => {
@@ -216,6 +216,15 @@ let getGetScheduleDoctorByDateService = (doctorId, date) => {
             } else {
                 let data = await db.Schedule.findAll({
                     where: { doctorId: doctorId, date: date },
+                    include: [
+                        {
+                            model: db.Allcode,
+                            as: "timeTypeData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
                 });
                 if (!data) data = [];
 
