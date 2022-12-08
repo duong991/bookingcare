@@ -59,32 +59,64 @@ let getAllDoctorsService = () => {
 let updateDetailDoctorService = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let value = {
+            let valueMarkdown = {
                 contentHTML: data.contentHTML,
                 contentMarkdown: data.contentMarkdown,
                 description: data.description,
             };
 
-            // check doctorId đã tồn tại chưa
+            let valueDoctorInfo = {
+                priceId: data.selectedPrice,
+                provinceId: data.selectedProvince,
+                paymentId: data.selectedPayment,
+                addressClinic: data.addressClinic,
+                nameClinic: data.nameClinic,
+            };
+
+            // check doctorId đã tồn tại chưa _ table Markdown
             await db.Markdown.findOne({
                 where: { doctorId: data.doctorId },
-            }).then((obj) => {
+            }).then(async (obj) => {
                 // nếu đã tồn tại tiến hành update
                 if (obj) {
                     return db.Markdown.update(
-                        { ...value },
+                        { ...valueMarkdown },
                         {
                             where: { doctorId: data.doctorId },
                         }
                     );
-                }
-                value = {
-                    ...value,
-                    doctorId: data.doctorId,
-                };
+                } else {
+                    let value = {
+                        ...valueMarkdown,
+                        doctorId: data.doctorId,
+                    };
 
-                // nếu không tồn tại tiến hành tạo mới
-                return db.Markdown.create(value);
+                    // nếu không tồn tại tiến hành tạo mới
+                    await db.Markdown.create(value);
+                }
+            });
+
+            // check doctorId đã tồn tại chưa _ table Doctor_Info
+            await db.Doctor_Info.findOne({
+                where: { doctorId: data.doctorId },
+            }).then(async (obj) => {
+                // nếu đã tồn tại tiến hành update
+                if (obj) {
+                    return db.Doctor_Info.update(
+                        { ...valueDoctorInfo },
+                        {
+                            where: { doctorId: data.doctorId },
+                        }
+                    );
+                } else {
+                    let value = {
+                        ...valueDoctorInfo,
+                        doctorId: data.doctorId,
+                    };
+
+                    // nếu không tồn tại tiến hành tạo mới
+                    await db.Doctor_Info.create(value);
+                }
             });
 
             resolve({

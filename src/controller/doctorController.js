@@ -27,17 +27,8 @@ let getAllDoctor = async (req, res) => {
 
 let updateDetailDoctor = async (req, res) => {
     try {
-        let doctorId = req.body.doctorId;
-        if (!doctorId) {
-            return res
-                .status(200)
-                .json({ errCode: 1, message: "Missing required parameters" });
-        } else {
-            let response = await doctorService.updateDetailDoctorService(
-                req.body
-            );
-            return res.status(200).json(response);
-        }
+        let response = await doctorService.updateDetailDoctorService(req.body);
+        return res.status(200).json(response);
     } catch (error) {
         console.log(error);
         return res
