@@ -71,6 +71,7 @@ let updateDetailDoctorService = (data) => {
                 paymentId: data.selectedPayment,
                 addressClinic: data.addressClinic,
                 nameClinic: data.nameClinic,
+                note: data.note,
             };
 
             // check doctorId đã tồn tại chưa _ table Markdown
@@ -157,6 +158,29 @@ let getDetailDoctorByIdService = (id) => {
                             as: "positionData",
                             attributes: ["valueEn", "valueVi"],
                         },
+                        {
+                            model: db.Doctor_Info,
+                            attributes: {
+                                exclude: ["id", "doctorId"],
+                            },
+                            include: [
+                                {
+                                    model: db.Allcode,
+                                    as: "priceData",
+                                    attributes: ["valueEn", "valueVi"],
+                                },
+                                {
+                                    model: db.Allcode,
+                                    as: "provinceData",
+                                    attributes: ["valueEn", "valueVi"],
+                                },
+                                {
+                                    model: db.Allcode,
+                                    as: "paymentData",
+                                    attributes: ["valueEn", "valueVi"],
+                                },
+                            ],
+                        },
                     ],
                     raw: false,
                     nest: true,
@@ -183,6 +207,38 @@ let getMarkdownByIdDoctorService = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             let data = await db.Markdown.findOne({ where: { doctorId: id } });
+            let Doctor_Info = await db.Doctor_Info.findOne({
+                where: { doctorId: id },
+                attributes: [
+                    "priceId",
+                    "provinceId",
+                    "paymentId",
+                    "addressClinic",
+                    "nameClinic",
+                    "note",
+                ],
+                // include: [
+                //     {
+                //         model: db.Allcode,
+                //         as: "priceData",
+                //         attributes: ["valueEn", "valueVi"],
+                //     },
+                //     {
+                //         model: db.Allcode,
+                //         as: "provinceData",
+                //         attributes: ["valueEn", "valueVi"],
+                //     },
+                //     {
+                //         model: db.Allcode,
+                //         as: "paymentData",
+                //         attributes: ["valueEn", "valueVi"],
+                //     },
+                // ],
+                // raw: false,
+                // nest: true,
+            });
+
+            data = { ...data, Doctor_Info };
             resolve({ errCode: 0, message: "Ok", data: data });
         } catch (error) {
             reject(error);
