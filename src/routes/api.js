@@ -32,7 +32,12 @@ let initAPIRouter = function (app) {
     );
     router.get(
         "/api/get-schedule-doctor-by-date",
-        doctorController.getGetScheduleDoctorByDate
+        doctorController.getScheduleDoctorByDate
+    );
+
+    router.get(
+        "/api/get-extra-info-doctor-by-id",
+        doctorController.getExtraInfoDoctorById
     );
 
     return app.use("/", router);

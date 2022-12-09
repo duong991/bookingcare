@@ -158,29 +158,29 @@ let getDetailDoctorByIdService = (id) => {
                             as: "positionData",
                             attributes: ["valueEn", "valueVi"],
                         },
-                        {
-                            model: db.Doctor_Info,
-                            attributes: {
-                                exclude: ["id", "doctorId"],
-                            },
-                            include: [
-                                {
-                                    model: db.Allcode,
-                                    as: "priceData",
-                                    attributes: ["valueEn", "valueVi"],
-                                },
-                                {
-                                    model: db.Allcode,
-                                    as: "provinceData",
-                                    attributes: ["valueEn", "valueVi"],
-                                },
-                                {
-                                    model: db.Allcode,
-                                    as: "paymentData",
-                                    attributes: ["valueEn", "valueVi"],
-                                },
-                            ],
-                        },
+                        // {
+                        //     model: db.Doctor_Info,
+                        //     attributes: {
+                        //         exclude: ["id", "doctorId"],
+                        //     },
+                        //     include: [
+                        //         {
+                        //             model: db.Allcode,
+                        //             as: "priceData",
+                        //             attributes: ["valueEn", "valueVi"],
+                        //         },
+                        //         {
+                        //             model: db.Allcode,
+                        //             as: "provinceData",
+                        //             attributes: ["valueEn", "valueVi"],
+                        //         },
+                        //         {
+                        //             model: db.Allcode,
+                        //             as: "paymentData",
+                        //             attributes: ["valueEn", "valueVi"],
+                        //         },
+                        //     ],
+                        // },
                     ],
                     raw: false,
                     nest: true,
@@ -203,6 +203,7 @@ let getDetailDoctorByIdService = (id) => {
     });
 };
 
+//!!!!
 let getMarkdownByIdDoctorService = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -217,27 +218,7 @@ let getMarkdownByIdDoctorService = (id) => {
                     "nameClinic",
                     "note",
                 ],
-                // include: [
-                //     {
-                //         model: db.Allcode,
-                //         as: "priceData",
-                //         attributes: ["valueEn", "valueVi"],
-                //     },
-                //     {
-                //         model: db.Allcode,
-                //         as: "provinceData",
-                //         attributes: ["valueEn", "valueVi"],
-                //     },
-                //     {
-                //         model: db.Allcode,
-                //         as: "paymentData",
-                //         attributes: ["valueEn", "valueVi"],
-                //     },
-                // ],
-                // raw: false,
-                // nest: true,
             });
-
             data = { ...data, Doctor_Info };
             resolve({ errCode: 0, message: "Ok", data: data });
         } catch (error) {
@@ -293,7 +274,7 @@ let bulkCreateScheduleService = (data) => {
     });
 };
 
-let getGetScheduleDoctorByDateService = (doctorId, date) => {
+let getScheduleDoctorByDateService = (doctorId, date) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!doctorId || !date) {
@@ -326,6 +307,46 @@ let getGetScheduleDoctorByDateService = (doctorId, date) => {
         }
     });
 };
+
+let getExtraInfoDoctorByIdService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing required parameters!",
+                });
+            }
+            let data = await db.Doctor_Info.findOne({
+                where: { doctorId: id },
+                attributes: { exclude: ["id", "doctorId"] },
+                include: [
+                    {
+                        model: db.Allcode,
+                        as: "priceData",
+                        attributes: ["valueEn", "valueVi"],
+                    },
+                    {
+                        model: db.Allcode,
+                        as: "provinceData",
+                        attributes: ["valueEn", "valueVi"],
+                    },
+                    {
+                        model: db.Allcode,
+                        as: "paymentData",
+                        attributes: ["valueEn", "valueVi"],
+                    },
+                ],
+                raw: false,
+                nest: true,
+            });
+            if (!data) data = {};
+            resolve({ errCode: 0, message: "Ok", data: data });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
 module.exports = {
     getTopDoctorHome,
     getAllDoctorsService,
@@ -333,5 +354,6 @@ module.exports = {
     getDetailDoctorByIdService,
     getMarkdownByIdDoctorService,
     bulkCreateScheduleService,
-    getGetScheduleDoctorByDateService,
+    getScheduleDoctorByDateService,
+    getExtraInfoDoctorByIdService,
 };
