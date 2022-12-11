@@ -1,6 +1,7 @@
 import express from "express";
 import userController from "../controller/userController";
 import doctorController from "../controller/doctorController";
+import patientController from "../controller/patientController";
 let router = express.Router();
 
 let initAPIRouter = function (app) {
@@ -26,10 +27,7 @@ let initAPIRouter = function (app) {
         "/api/get-markdown-by-id-doctor",
         doctorController.getMarkdownByIdDoctor
     );
-    router.post(
-        "/api/bulk-create-schedule",
-        doctorController.bulkCreateSchedule
-    );
+
     router.get(
         "/api/get-schedule-doctor-by-date",
         doctorController.getScheduleDoctorByDate
@@ -45,6 +43,10 @@ let initAPIRouter = function (app) {
         doctorController.getProfileDoctorById
     );
 
+    router.post(
+        "/api/patient-book-appointment",
+        patientController.postBookAppointment
+    );
     return app.use("/", router);
 };
 
