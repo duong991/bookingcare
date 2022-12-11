@@ -103,6 +103,20 @@ let getExtraInfoDoctorById = async (req, res) => {
             .json({ errorCode: -1, message: "Error from server..." });
     }
 };
+
+let getProfileDoctorById = async (req, res) => {
+    try {
+        let result = await doctorService.getProfileDoctorByIdService(
+            req.query.doctorId
+        );
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(200)
+            .json({ errorCode: -1, message: "Error from server..." });
+    }
+};
 module.exports = {
     getDoctorHome,
     getAllDoctor,
@@ -112,4 +126,5 @@ module.exports = {
     bulkCreateSchedule,
     getScheduleDoctorByDate,
     getExtraInfoDoctorById,
+    getProfileDoctorById,
 };

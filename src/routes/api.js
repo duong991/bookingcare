@@ -40,6 +40,11 @@ let initAPIRouter = function (app) {
         doctorController.getExtraInfoDoctorById
     );
 
+    router.get(
+        "/api/get-profile-doctor-by-id",
+        doctorController.getProfileDoctorById
+    );
+
     return app.use("/", router);
 };
 
