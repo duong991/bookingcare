@@ -1,5 +1,6 @@
 import db from "../models/index";
 import _ from "lodash";
+import emailService from "./emailService";
 
 let postBookAppointmentService = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -9,6 +10,14 @@ let postBookAppointmentService = (data) => {
                 errMessage: "Missing required parameters!",
             });
         } else {
+            await emailService.sendSimpleEmail({
+                receiveEmail: data.email,
+                fullName: data.fullName,
+                time: "9h-10h",
+                doctorName: "Nguyễn Thọ Lộ",
+                nameClinic: "Phòng khám Chuyên khoa Da Liễu",
+            });
+
             let [user, result] = await db.User.findOrCreate({
                 where: { email: data.email },
                 defaults: {
