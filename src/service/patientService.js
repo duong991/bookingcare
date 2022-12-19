@@ -41,7 +41,7 @@ let postBookAppointmentService = (data) => {
                 },
             });
 
-            // create a booking reacord
+            // create a booking record
             let { id } = user;
             if (user) {
                 await db.Booking.findOrCreate({
@@ -70,6 +70,7 @@ let postBookAppointmentService = (data) => {
 let postVerifyBookAppointmentService = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(data);
             if (!data.token || !data.doctorId) {
                 resolve({
                     errCode: 1,
