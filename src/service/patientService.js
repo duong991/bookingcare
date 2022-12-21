@@ -11,55 +11,55 @@ let buildUrlEmail = (doctorId, token) => {
 
 let postBookAppointmentService = (data) => {
     return new Promise(async (resolve, reject) => {
-        if (
-            !data.email ||
-            !data.doctorId ||
-            !data.date ||
-            !data.timeType ||
-            !data.fullName
-        ) {
-            resolve({
-                errCode: 1,
-                errMessage: "Missing required parameters!",
-            });
-        } else {
-            let token = uuidv4();
-            await emailService.sendSimpleEmail({
-                receiveEmail: data.email,
-                fullName: data.fullName,
-                time: data.timeString,
-                doctorName: data.doctorName,
-                language: data.language,
-                redirectLink: buildUrlEmail(data.doctorId, token),
-            });
+        try {
+            if (
+                !data.email ||
+                !data.doctorId ||
+                !data.date ||
+                !data.timeType ||
+                !data.fullName
+            ) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing required parameters!",
+                });
+            } else {
+                let token = uuidv4();
+                await emailService.sendSimpleEmail({
+                    receiveEmail: data.email,
+                    fullName: data.fullName,
+                    time: data.timeString,
+                    doctorName: data.doctorName,
+                    language: data.language,
+                    redirectLink: buildUrlEmail(data.doctorId, token),
+                });
 
-            let [user, result] = await db.User.findOrCreate({
-                where: { email: data.email },
-                defaults: {
-                    email: data.email,
-                    roleId: "R3",
-                },
-            });
-
-            // create a booking record
-            let { id } = user;
-            if (user) {
-                await db.Booking.findOrCreate({
-                    where: { patientId: id },
+                let [user, result] = await db.User.findOrCreate({
+                    where: { email: data.email },
                     defaults: {
-                        statusId: "S1",
-                        doctorId: data.doctorId,
-                        patientId: id,
-                        date: data.date,
-                        timeType: data.timeType,
-                        token: token,
+                        email: data.email,
+                        roleId: "R3",
                     },
                 });
-            }
 
-            resolve({ errCode: 0, message: "Save info patient success" });
-        }
-        try {
+                // create a booking record
+                let { id } = user;
+                if (user) {
+                    await db.Booking.findOrCreate({
+                        where: { patientId: id },
+                        defaults: {
+                            statusId: "S1",
+                            doctorId: data.doctorId,
+                            patientId: id,
+                            date: data.date,
+                            timeType: data.timeType,
+                            token: token,
+                        },
+                    });
+                }
+
+                resolve({ errCode: 0, message: "Save info patient success" });
+            }
         } catch (error) {
             console.log(error);
             reject(error);
