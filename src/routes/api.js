@@ -63,6 +63,8 @@ let initAPIRouter = function (app) {
         specialtyController.createNewSpecialty
     );
 
+    router.get("/api/get-all-specialty", specialtyController.getAllSpecialty);
+
     return app.use("/", router);
 };
 
