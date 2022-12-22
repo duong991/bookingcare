@@ -72,6 +72,8 @@ let updateDetailDoctorService = (data) => {
                 addressClinic: data.addressClinic,
                 nameClinic: data.nameClinic,
                 note: data.note,
+                clinicId: data.selectedClinic,
+                specialtyId: data.selectedSpecialty,
             };
 
             // check doctorId đã tồn tại chưa _ table Markdown
