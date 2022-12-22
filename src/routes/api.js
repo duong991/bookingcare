@@ -3,7 +3,7 @@ import userController from "../controller/userController";
 import doctorController from "../controller/doctorController";
 import patientController from "../controller/patientController";
 import specialtyController from "../controller/specialtyController";
-
+import clinicController from "../controller/clinicController";
 let router = express.Router();
 
 let initAPIRouter = function (app) {
@@ -58,17 +58,24 @@ let initAPIRouter = function (app) {
         patientController.postVerifyBookAppointment
     );
 
+    // xây dựng api quản lý chuyên khoa
     router.post(
         "/api/create-new-specialty",
         specialtyController.createNewSpecialty
     );
-
     router.get("/api/get-all-specialty", specialtyController.getAllSpecialty);
     router.get(
         "/api/get-detail-specialty-by-id",
         specialtyController.getDetailSpecialtyById
     );
 
+    // xây dựng api quản lý phòng khám
+    router.post("/api/create-new-clinic", clinicController.createNewClinic);
+    router.get("/api/get-all-specialty", clinicController.getAllClinic);
+    router.get(
+        "/api/get-detail-clinic-by-id",
+        clinicController.getDetailClinicById
+    );
     return app.use("/", router);
 };
 
