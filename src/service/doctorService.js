@@ -219,6 +219,8 @@ let getMarkdownByIdDoctorService = (id) => {
                     "addressClinic",
                     "nameClinic",
                     "note",
+                    "clinicId",
+                    "specialtyId",
                 ],
             });
             data = { ...data, Doctor_Info };
