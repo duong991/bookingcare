@@ -145,9 +145,31 @@ let updateDetailClinicByIdService = async (data) => {
     });
 };
 
+let deleteDetailClinicByIdService = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({ errCode: 1, errMessage: "Missing parameter" });
+            } else {
+                await db.Clinic_Specialty.destroy({
+                    where: { clinicId: id },
+                });
+                await db.Clinic.destroy({
+                    where: { id: id },
+                });
+                resolve({ errCode: 0, errMessage: "ok" });
+            }
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     createNewClinicService,
     getAllClinicService,
     getDetailClinicByIdService,
     updateDetailClinicByIdService,
+    deleteDetailClinicByIdService,
 };

@@ -51,10 +51,25 @@ let updateDetailClinicById = async (req, res) => {
             .json({ errorCode: -1, message: "Error from server..." });
     }
 };
+let deleteDetailClinicById = async (req, res) => {
+    try {
+        console.log(req.body.id);
+        let result = await clinicService.deleteDetailClinicByIdService(
+            req.body.id
+        );
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(200)
+            .json({ errorCode: -1, message: "Error from server..." });
+    }
+};
 
 module.exports = {
     createNewClinic,
     getAllClinic,
     getDetailClinicById,
     updateDetailClinicById,
+    deleteDetailClinicById,
 };

@@ -80,6 +80,10 @@ let initAPIRouter = function (app) {
         "/api/update-detail-clinic-by-id",
         clinicController.updateDetailClinicById
     );
+    router.delete(
+        "/api/delete-clinic-by-id",
+        clinicController.deleteDetailClinicById
+    );
 
     return app.use("/", router);
 };
