@@ -71,11 +71,16 @@ let initAPIRouter = function (app) {
 
     // xây dựng api quản lý phòng khám
     router.post("/api/create-new-clinic", clinicController.createNewClinic);
-    router.get("/api/get-all-specialty", clinicController.getAllClinic);
+    router.get("/api/get-all-clinic", clinicController.getAllClinic);
     router.get(
         "/api/get-detail-clinic-by-id",
         clinicController.getDetailClinicById
     );
+    router.put(
+        "/api/update-detail-clinic-by-id",
+        clinicController.updateDetailClinicById
+    );
+
     return app.use("/", router);
 };
 

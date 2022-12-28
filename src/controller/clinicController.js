@@ -27,8 +27,21 @@ let getAllClinic = async (req, res) => {
 let getDetailClinicById = async (req, res) => {
     try {
         let result = await clinicService.getDetailClinicByIdService(
-            req.query.id,
-            req.query.location
+            req.query.id
+        );
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(200)
+            .json({ errorCode: -1, message: "Error from server..." });
+    }
+};
+
+let updateDetailClinicById = async (req, res) => {
+    try {
+        let result = await clinicService.updateDetailClinicByIdService(
+            req.body
         );
         return res.status(200).json(result);
     } catch (error) {
@@ -43,4 +56,5 @@ module.exports = {
     createNewClinic,
     getAllClinic,
     getDetailClinicById,
+    updateDetailClinicById,
 };
