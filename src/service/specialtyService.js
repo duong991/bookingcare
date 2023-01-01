@@ -39,7 +39,7 @@ let getAllSpecialtyService = (type) => {
                 data = await db.Specialty.findAll();
                 if (data && data.length > 0) {
                     data.map((item) => {
-                        item.image = new Buffer(item.image, "base64").toString(
+                        item.image = Buffer.from(item.image, "base64").toString(
                             "binary"
                         );
                         return item;
@@ -94,8 +94,66 @@ let getDetailSpecialtyByIdService = (id, location) => {
     });
 };
 
+let updateDetailSpecialtyByIdService = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id) {
+                resolve({ errCode: 1, errMessage: "Missing parameter" });
+            } else {
+                let dataUpdate = {
+                    name: data.name,
+                    descriptionMarkDown: data.descriptionMarkdown,
+                    descriptionHTML: data.descriptionHTML,
+                };
+                if (data.imageBase64) {
+                    dataUpdate.image = data.imageBase64;
+                }
+                if (data.descriptionHTML) {
+                    dataUpdate.descriptionHTML = data.descriptionHTML;
+                }
+
+                await db.Specialty.update(dataUpdate, {
+                    where: { id: data.id },
+                });
+
+                if (data) {
+                    resolve({ errCode: 0, errMessage: "ok", data: data });
+                } else {
+                    resolve({
+                        errCode: 2,
+                        errMessage: "Id specialty not found",
+                    });
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+};
+
+let deleteDetailSpecialtyByIdService = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({ errCode: 1, errMessage: "Missing parameter" });
+            } else {
+                await db.Specialty.destroy({
+                    where: { id: id },
+                });
+                resolve({ errCode: 0, errMessage: "ok" });
+            }
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     createNewSpecialtyService,
     getAllSpecialtyService,
     getDetailSpecialtyByIdService,
+    updateDetailSpecialtyByIdService,
+    deleteDetailSpecialtyByIdService,
 };

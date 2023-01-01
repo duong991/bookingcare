@@ -47,7 +47,7 @@ let getAllClinicService = () => {
             let data = await db.Clinic.findAll();
             if (data && data.length > 0) {
                 data.map((item) => {
-                    item.image = new Buffer(item.image, "base64").toString(
+                    item.image = Buffer.from(item.image, "base64").toString(
                         "binary"
                     );
                     return item;
@@ -74,7 +74,7 @@ let getDetailClinicByIdService = (id) => {
 
                 if (data) {
                     // chuyển hình ảnh từ dạng Buffer sang string
-                    data.image = new Buffer(data.image, "base64").toString(
+                    data.image = Buffer.from(data.image, "base64").toString(
                         "binary"
                     );
                     // lấy ra danh sach id chuyên khoa thuộc bệnh viện
@@ -111,10 +111,12 @@ let updateDetailClinicByIdService = async (data) => {
                     name: data.name,
                     address: data.address,
                     descriptionMarkDown: data.descriptionMarkdown,
-                    descriptionHTML: data.descriptionHTML,
                 };
                 if (data.imageBase64) {
                     dataUpdate.image = data.imageBase64;
+                }
+                if (data.descriptionHTML) {
+                    dataUpdate.descriptionHTML = data.descriptionHTML;
                 }
 
                 await db.Clinic.update(

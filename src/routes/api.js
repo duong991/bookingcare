@@ -69,6 +69,15 @@ let initAPIRouter = function (app) {
         specialtyController.getDetailSpecialtyById
     );
 
+    router.put(
+        "/api/update-detail-specialty-by-id",
+        specialtyController.updateDetailSpecialtyById
+    );
+    router.delete(
+        "/api/delete-specialty-by-id",
+        specialtyController.deleteDetailSpecialtyById
+    );
+
     // xây dựng api quản lý phòng khám
     router.post("/api/create-new-clinic", clinicController.createNewClinic);
     router.get("/api/get-all-clinic", clinicController.getAllClinic);
